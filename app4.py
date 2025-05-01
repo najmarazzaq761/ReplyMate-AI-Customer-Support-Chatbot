@@ -13,7 +13,7 @@ from langchain_core.prompts import ChatPromptTemplate
 # page configuration
 st.title("ReplyMate AI")
 with st.sidebar:
-    st.image("hack4.jpg", use_column_width=True)
+    st.image("hack4.jpg", use_container_width=True)
     st.markdown(
         "**ReplyMate AI** is your smart e-commerce assistant that instantly answers customer queries about products. "
         "Enhance your customer support with fast, accurate, and AI-powered responses from your live product database."
