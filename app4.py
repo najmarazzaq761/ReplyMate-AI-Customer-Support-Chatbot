@@ -2,8 +2,6 @@
 import streamlit as st
 import pandas as pd
 import requests
-from openai import OpenAI
-from langchain_openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
