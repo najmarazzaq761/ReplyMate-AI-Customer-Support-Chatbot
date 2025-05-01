@@ -4,6 +4,7 @@ pandas
 langchain
 langchain-core
 langchain-google-genai
+langchain-community==0.0.32
 google-api-python-client
 faiss-cpu==1.7.4
 tiktoken
