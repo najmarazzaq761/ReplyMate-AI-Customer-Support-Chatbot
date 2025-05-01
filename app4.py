@@ -43,7 +43,7 @@ def load_data():
 # creating data chunks
 @st.cache_data
 def split_data(_data):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=50)
     return text_splitter.create_documents([_data])
 
 
