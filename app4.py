@@ -2,6 +2,8 @@
 import streamlit as st
 import pandas as pd
 import requests
+# from openai import OpenAI                        # use if you want to use openapi key
+# from langchain_openai import OpenAIEmbeddings    # use if you want to use openapi key
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
@@ -13,10 +15,9 @@ from langchain_core.prompts import ChatPromptTemplate
 # page configuration
 st.title("ReplyMate AI")
 with st.sidebar:
-    st.image("hack4.jpg", use_container_width=True)
+    st.image("hack4.jpg", use_column_width=True)
     st.markdown(
         "**ReplyMate AI** is your smart e-commerce assistant that instantly answers customer queries about products. "
-        "Enhance your customer support with fast, accurate, and AI-powered responses from your live product database."
     )
     st.title("Configuration")
     temp = st.slider("Temperature", min_value=0.0, max_value=1.0, value=0.7)
@@ -43,7 +44,7 @@ def load_data():
 # creating data chunks
 @st.cache_data
 def split_data(_data):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=50)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500)
     return text_splitter.create_documents([_data])
 
 
@@ -75,6 +76,7 @@ llm = ChatGoogleGenerativeAI(
 system_prompt = (
     "You are an assistant for product question-answering tasks. "
     "Use the following product database context to answer the question. "
+    "Please always give answer in proper format."
     "If you don't know the answer, say you don't know. "
     "\n\n"
     "{context}"
@@ -105,3 +107,8 @@ if query:
     st.chat_message("assistant").write(answer)
     st.session_state.messages.append({"role": "user", "content": query})
     st.session_state.messages.append({"role": "assistant", "content": answer})
+
+def clear_chat_history():
+    st.session_state.messages = [{"role": "assistant", "content": "Ask Question"}]
+    
+st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
