@@ -4,7 +4,7 @@ pandas
 langchain
 langchain-core
 langchain-groq
-langchain-community==0.0.32
-faiss-cpu==1.7.4
+langchain-community
+faiss-cpu
 tiktoken
 sentence-transformers
