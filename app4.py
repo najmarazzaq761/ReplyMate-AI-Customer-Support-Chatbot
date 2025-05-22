@@ -3,8 +3,8 @@ import streamlit as st
 import pandas as pd
 import requests
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
@@ -13,7 +13,7 @@ from langchain_core.prompts import ChatPromptTemplate
 # page configuration
 st.title("ReplyMate AI")
 with st.sidebar:
-    st.image("hack4.jpg", use_column_width=True)
+    st.image("hack4.jpg", use_container_width=True)
     st.markdown(
         "**ReplyMate AI** is your smart e-commerce assistant that instantly answers customer queries about products. "
     )
