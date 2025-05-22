@@ -11,7 +11,7 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 
 # page configuration
-st.title("ReplyMate AI")
+st.title("🛍️🤖 ReplyMate AI")
 with st.sidebar:
     st.image("hack4.jpg", use_container_width=True)
     st.markdown(
