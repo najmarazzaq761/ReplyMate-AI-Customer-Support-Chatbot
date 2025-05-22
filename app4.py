@@ -2,12 +2,10 @@
 import streamlit as st
 import pandas as pd
 import requests
-# from openai import OpenAI                        # use if you want to use openapi key
-# from langchain_openai import OpenAIEmbeddings    # use if you want to use openapi key
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_groq import ChatGroq
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
@@ -51,10 +49,7 @@ def split_data(_data):
 # creating vectorstores
 @st.cache_resource
 def create_vectorstores(_docs):
-    embeddings = GoogleGenerativeAIEmbeddings(
-        model="models/embedding-001",
-        google_api_key=st.secrets["GOOGLE_API_KEY"]
-    )
+    embeddings = embeddings = HuggingFaceEmbeddings()
     return FAISS.from_documents(documents=_docs, embedding=embeddings)
 
 # Load and process
@@ -64,9 +59,9 @@ vectorstores = create_vectorstores(docs)
 
 # LLM and retriever
 retriever = vectorstores.as_retriever(search_type="similarity", search_kwargs={"k": 10})
-llm = ChatGoogleGenerativeAI(
-    model="gemini-1.5-pro",
-    google_api_key=st.secrets["GOOGLE_API_KEY"],
+llm = ChatGroq(
+    groq_api_key=st.secrets["GROQ_API_KEY"],
+    model="llama-3.1-8b-instant",
     temperature=temp,
     max_tokens=None,
     timeout=None
@@ -74,11 +69,15 @@ llm = ChatGoogleGenerativeAI(
 
 # prompt template
 system_prompt = (
-    "You are an assistant for product question-answering tasks. "
+    "You are an assistant for product question-answering tasks for an E-commerce Company named as NR Colloections. "
     "Use the following product database context to answer the question. "
     "Please always give answer in proper format."
     "If you don't know the answer, say you don't know. "
     "\n\n"
+    "If the user sends a greeting (like 'hi', 'hello', 'hey' , or 'what you can do'), respond with a friendly greeting, "
+    "introduce yourself as a ReplyMate AI, and let them know you're available to assist with any questions about NR Collecitions. "
+    "Also, ask: 'How can I help you today?'"
+    "please only greet them once and then only give answer to queries and don't introduce yourself with every answer\n\n"
     "{context}"
 )
 prompt = ChatPromptTemplate.from_messages([
@@ -108,6 +107,7 @@ if query:
     st.session_state.messages.append({"role": "user", "content": query})
     st.session_state.messages.append({"role": "assistant", "content": answer})
 
+# clear chat history
 def clear_chat_history():
     st.session_state.messages = [{"role": "assistant", "content": "Ask Question"}]
     
